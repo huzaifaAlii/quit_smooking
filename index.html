@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quit Smoking - Journey Tracker</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #1e1e2f;
+    }
+
+    .container {
+      background: #e0e5ec;
+      border-radius: 30px;
+      box-shadow: 20px 20px 60px #bebfc9, -20px -20px 60px #ffffff;
+      width: 100%;
+      max-width: 480px;
+      padding: 40px 35px;
+      text-align: center;
+      user-select: none;
+    }
+
+    h1 {
+      font-weight: 600;
+      color: #3b3f58;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+      letter-spacing: 1.2px;
+    }
+
+    p.subtitle {
+      font-weight: 400;
+      color: #5a5f7d;
+      font-size: 1.1rem;
+      margin-bottom: 30px;
+      line-height: 1.5;
+    }
+
+    ul.tip-list {
+      list-style: none;
+      margin-bottom: 40px;
+      text-align: left;
+      padding-left: 20px;
+      color: #555a7a;
+      font-size: 1rem;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+
+    ul.tip-list li {
+      margin-bottom: 12px;
+      padding-left: 12px;
+      position: relative;
+    }
+
+    ul.tip-list li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: 700;
+    }
+
+    .tracker {
+      margin-bottom: 30px;
+    }
+
+    .days-count {
+      font-size: 5rem;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 5px;
+      letter-spacing: 3px;
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+
+    .days-label {
+      font-size: 1.1rem;
+      color: #5a5f7d;
+      margin-bottom: 25px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .progress-bar {
+      height: 15px;
+      background: #c3c8d9;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #667eea;
+      width: 0;
+      border-radius: 10px 0 0 10px;
+      transition: width 0.5s ease;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    button {
+      background: #e0e5ec;
+      border-radius: 25px;
+      box-shadow: 8px 8px 15px #bebfc9, -8px -8px 15px #ffffff;
+      border: none;
+      padding: 15px 35px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #667eea;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    button:hover:not(:disabled) {
+      box-shadow: inset 4px 4px 8px #bebfc9, inset -4px -4px 8px #ffffff;
+      color: #4b55b2;
+      transform: scale(1.05);
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.95);
+    }
+
+    button:disabled {
+      color: #a5a8c3;
+      cursor: not-allowed;
+      box-shadow: none;
+      background: #d0d3e1;
+    }
+
+    .message {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #3b3f58;
+      margin-top: 20px;
+      min-height: 24px;
+      user-select: none;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .message.show {
+      opacity: 1;
+    }
+
+    .quote {
+      font-style: italic;
+      font-size: 1rem;
+      margin-top: 15px;
+      color: #475170;
+      min-height: 36px;
+      user-select: none;
+      opacity: 0.9;
+      transition: opacity 0.4s ease;
+    }
+
+    /* Scrollbar for tips */
+    ul.tip-list::-webkit-scrollbar {
+      width: 6px;
+    }
+    ul.tip-list::-webkit-scrollbar-thumb {
+      background: #667eea;
+      border-radius: 3px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <main class="container" role="main" aria-label="Quit Smoking Support Website">
+    <h1>🚭 Quit Smoking</h1>
+    <p class="subtitle">Track your smoke-free days and get daily motivation to stay strong. Every day counts!</p>
+
+    <ul class="tip-list" aria-live="polite" aria-atomic="true">
+      <li>Set a clear quit date and prepare yourself mentally.</li>
+      <li>Remove cigarettes and avoid triggers around you.</li>
+      <li>Replace smoking with healthy alternatives like exercise or gum.</li>
+      <li>Seek support from friends, family, or support groups.</li>
+      <li>Celebrate each smoke-free day to stay motivated.</li>
+    </ul>
+
+    <section class="tracker" aria-live="polite" aria-atomic="true" aria-label="Smoking quit progress tracker">
+      <div class="days-count" id="daysCount">0</div>
+      <div class="days-label">Days Without Smoking</div>
+    </section>
+
+    <div class="progress-bar" aria-label="Progress towards 30 day smoke-free goal">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <div class="btn-group">
+      <button id="incrementBtn" aria-describedby="message">+1 Day</button>
+      <button id="resetBtn" aria-describedby="message" style="color: #e05050;">Reset</button>
+    </div>
+
+    <div class="message" id="message" role="alert" aria-live="assertive"></div>
+
+    <div class="quote" id="quote" aria-live="polite" aria-atomic="true"></div>
+  </main>
+
+  <script>
+    const daysCountEl = document.getElementById('daysCount');
+    const incrementBtn = document.getElementById('incrementBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const messageEl = document.getElementById('message');
+    const progressBarFill = document.getElementById('progressBar');
+    const quoteEl = document.getElementById('quote');
+
+    const maxGoal = 30;
+
+    const quotes = [
+      "The journey of a thousand miles begins with a single step.",
+      "Every day without smoking is a victory.",
+      "Your lungs will thank you for every smoke-free day.",
+      "Stay strong, the reward is worth it!",
+      "One day at a time, one step closer to freedom.",
+      "Believe you can and you're halfway there.",
+      "Quit smoking, start living."
+    ];
+
+    let days = 0;
+
+    // Load saved progress
+    if(localStorage.getItem('quitDays')) {
+      days = parseInt(localStorage.getItem('quitDays'));
+      updateUI();
+    }
+
+    function showMessage(text) {
+      messageEl.textContent = text;
+      messageEl.classList.add('show');
+      setTimeout(() => {
+        messageEl.classList.remove('show');
+      }, 3000);
+    }
+
+    function updateUI() {
+      daysCountEl.textContent = days;
+      progressBarFill.style.width = ((days / maxGoal) * 100) + '%';
+
+      if(days >= maxGoal) {
+        incrementBtn.disabled = true;
+        showMessage('🎉 Congratulations! You reached 30 smoke-free days!');
+        quoteEl.textContent = "You're doing amazing! Keep it going!";
+      } else {
+        incrementBtn.disabled = false;
+        quoteEl.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+      }
+    }
+
+    incrementBtn.addEventListener('click', () => {
+      if(days < maxGoal) {
+        days++;
+        localStorage.setItem('quitDays', days);
+        updateUI();
+
+        // Animate scale
+        daysCountEl.style.transform = 'scale(1.3)';
+        setTimeout(() => {
+          daysCountEl.style.transform = 'scale(1)';
+        }, 200);
+
+        showMessage('Great job! Keep it up 💪');
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      if(confirm('Are you sure you want to reset your progress?')) {
+        days = 0;
+        localStorage.setItem('quitDays', days);
+        updateUI();
+        showMessage('Progress reset. New start, new strength!');
+      }
+    });
+  </script>
+
+</body>
+</html>
